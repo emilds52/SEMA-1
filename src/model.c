@@ -1,7 +1,9 @@
+#include <stddef.h>
 #include "fsm.h"
-#TimeV 100
-#TimeA 50
-#TimeR 75
+
+#define TimeV 100
+#define TimeA 50
+#define TimeR 75
 //TODO: como calculamos now? Como generamos entradas? Desde barra comandos o probamos en uc?
 
 /* USER CODE BEGIN PV */
@@ -22,9 +24,9 @@ static int E, Bs, Bp = 0; //inputs, modelamos?
 static int next = ;// now?
 
 // Guard functions
-static int evaluate_to_Ap (fsm_t* this){return (now > next) && (E == 1 || Bp = 1);}
+static int evaluate_to_Ap (fsm_t* this){return (now > next) && (E == 1 || Bp == 1);}
 static int evaluate_next  (fsm_t* this){return (now > next);}
-static int evaluate_to_As (fsm_t* this){return (now > next) && (E == 0 || Bs = 1);}
+static int evaluate_to_As (fsm_t* this){return (now > next) && (E == 0 || Bs == 1);}
 
 // Output functions
 static void to_Vp(fsm_t* this)
@@ -61,7 +63,7 @@ static void to_Rs(fsm_t* this)
 {
   As = 0; Rs = 1;
   next += TimeR; 
-
+}
 
 
 //Explicit FSM description
@@ -70,14 +72,14 @@ static fsm_trans_t Semaphore[] = {
   {s_Vp , evaluate_to_Ap , s_Ap , to_Ap },
   {s_Ap , evaluate_next  , s_Rp , to_Rp },
   {s_Rp , evaluate_next  , s_Vs , to_Vs },
-  {S_Vs , evaluate_to_As , s_As , to_As },
+  {s_Vs , evaluate_to_As , s_As , to_As },
   {s_As , evaluate_next  , s_Rs , to_Rs },
-  {s_Rs , evaluate_next  , s_Vp , to_Vp }
+  {s_Rs , evaluate_next  , s_Vp , to_Vp },
   {-1, NULL, -1, NULL},
 };
 
 
-/* USER CODE END PV */
-
-
+fsm_t* model_fsm_new(){
+    return fsm_new(Semaphore);
+}
 
