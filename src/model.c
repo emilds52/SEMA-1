@@ -1,12 +1,13 @@
 #include <bits/time.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <time.h>
 #include "fsm.h"
 
 #define NANO_SECOND_MULTIPLIER 1000000000L
-const long TIMEV = 0.1*NANO_SECOND_MULTIPLIER; 
-const long TIMEA = 0.05*NANO_SECOND_MULTIPLIER; 
-const long TIMER = 0.075*NANO_SECOND_MULTIPLIER; 
+const long TIMEV = 3*NANO_SECOND_MULTIPLIER; 
+const long TIMEA = 1*NANO_SECOND_MULTIPLIER; 
+const long TIMER = 2*NANO_SECOND_MULTIPLIER; 
 //TODO: como calculamos now? Como generamos entradas? Desde barra comandos o probamos en uc?
 
 enum semaphoreFSM {
@@ -57,13 +58,15 @@ static void to_Vp(fsm_t* this)
     Vp = 1; Rp = 0;
     clock_gettime(CLOCK_MONOTONIC, &next);
     add_time_ns(&next, TIMEV);
+    printf("state = Vp\n");
 }
 
 static void to_Ap(fsm_t* this)
 {
-    Ap = 1; Vp = 0;
+    Ap = 1; Vp = 0; Bp = 0;
     clock_gettime(CLOCK_MONOTONIC, &next);
     add_time_ns(&next, TIMEA);
+    printf("state = Ap\n");
 }
 
 static void to_Rp(fsm_t* this)
@@ -71,6 +74,7 @@ static void to_Rp(fsm_t* this)
     Ap = 0; Rp = 1;
     clock_gettime(CLOCK_MONOTONIC, &next);
     add_time_ns(&next, TIMER);
+    printf("state = Rp\n");
 }
 
 static void to_Vs(fsm_t* this)
@@ -78,13 +82,15 @@ static void to_Vs(fsm_t* this)
     Vs = 1; Rs = 0;
     clock_gettime(CLOCK_MONOTONIC, &next);
     add_time_ns(&next, TIMEV);
+    printf("state = Vs\n");
 }
 
 static void to_As(fsm_t* this)
 {
-    As = 1; Vs = 0;
+    As = 1; Vs = 0; Bs = 0;
     clock_gettime(CLOCK_MONOTONIC, &next);
     add_time_ns(&next, TIMEA);
+    printf("state = As\n");
 }
 
 static void to_Rs(fsm_t* this)
@@ -92,6 +98,7 @@ static void to_Rs(fsm_t* this)
     As = 0; Rs = 1;
     clock_gettime(CLOCK_MONOTONIC, &next);
     add_time_ns(&next, TIMER);
+    printf("state = Rs\n");
 }
 
 
@@ -113,3 +120,8 @@ fsm_t* model_fsm_new(){
 }
 
 
+void update_variables(int E_up, int Bp_up, int Bs_up){
+   E = E_up;
+   if (Bp_up){Bp = 1;}
+   if (Bs_up){Bs = 1;}
+}
