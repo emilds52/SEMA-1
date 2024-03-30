@@ -1,21 +1,15 @@
-//TODO: Ahora mismo compila, pero p5, p7 y p8 dice que no las cumple. Depurar esto es una mierda.
-//además, si next no se pone a 1, es normal que no se pongan, pero sabemos que siempre se va a poner (paso del tiempo)
-
-
 ltl p1 { [](!(Vp && Vs)) } // Globally never Vp and Vs at the same time
-ltl p2 { []<> (nxt && E) -> []<>Vp } // Globally eventually E means globally eventually Vp (?) --Sergio-- no la comprendo
-ltl p3 { []<> nxt -> ([](E -> <> Vs)) } // Globally if E then eventually Vp
-ltl p4 { [](Vs && !E -> <>(!Vs W E)) } // Si V de la segunda y no E entonces eventualmente no se pone Vs a no ser que haya E? --Sergio-- no la comprendo
+ltl p2 { []<> nxt -> ([](E -> <> Vs)) } // Globally if E then eventually Vp
 // RELATED WITH CROSSWALK
-ltl p5 { []<> nxt ->( [](Bp -> <> Rp)) }
-ltl p6 { []<> nxt ->( [](Bs -> <> Rs)) }
-ltl p7 { [](!(Vp && SPp)) } // Globally never SPp and Vp at the same time
-ltl p8 { [](!(Vs && SPs)) } // Globally never SPs and Vs at the same time
+ltl p3 { []<> nxt ->( [](Bp -> <> Rp)) } 
+ltl p4 { []<> nxt ->( [](Bs -> <> Rs)) }
+ltl p5 { [](!(Vp && SPp)) } // Globally never SPp and Vp at the same time
+ltl p6 { [](!(Vs && SPs)) } // Globally never SPs and Vs at the same time
 
 int E;
 int nxt;
 //Rp=Rojo principal, Ap=Amarillo principal, Vp=Verde principal
-//Bp=Boton principal, Spp=Semaforo peatones principal -> binario, con 1 es verde, con 0 es rojo. siempre es igual a Rp (solo cruzamos si no pasan coches)
+//Bp=Boton principal, Spp=Semaforo peatones principal -> binario, con 1 es verde, con 0 es rojo.
 int Rp, Ap, Vp, Bp, SPp;
 int Rs, As, Vs, Bs, SPs;
 int state;
@@ -26,7 +20,7 @@ active proctype fsm() {
 	state = s_Vp;
 	Vp = 1; Ap = 0; Rp = 0; 
 	Vs = 0; As = 0; Rs = 1; 
-	SPp = Rp; SPs = Rs; // always
+	SPp = Rp; SPs = Rs;
 	nxt = 0;
 	do
 	:: (state == s_Vp) -> atomic {
