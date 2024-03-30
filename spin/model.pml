@@ -7,8 +7,8 @@ ltl p2 { []<> (nxt && E) -> []<>Vp } // Globally eventually E means globally eve
 ltl p3 { []<> nxt -> ([](E -> <> Vs)) } // Globally if E then eventually Vp
 ltl p4 { [](Vs && !E -> <>(!Vs W E)) } // Si V de la segunda y no E entonces eventualmente no se pone Vs a no ser que haya E? --Sergio-- no la comprendo
 // RELATED WITH CROSSWALK
-ltl p5 { [](Bp -> <> Rp) } //Globally if principal boton, then eventually Rp
-ltl p6 { [](Bs -> <> Rs) } //Globally if secundary boton, then eventually Rs
+ltl p5 { []<> nxt ->( [](Bp -> <> Rp)) }
+ltl p6 { []<> nxt ->( [](Bs -> <> Rs)) }
 ltl p7 { [](!(Vp && SPp)) } // Globally never SPp and Vp at the same time
 ltl p8 { [](!(Vs && SPs)) } // Globally never SPs and Vs at the same time
 
@@ -36,12 +36,12 @@ active proctype fsm() {
 	}
 	:: (state == s_Ap) -> atomic {
 		if
-		:: nxt -> Ap = 0; Rp = 1; nxt = 0; state = s_Rp;
+		:: nxt -> Ap = 0; Rp = 1; nxt = 0; state = s_Rp; SPp = 1;
 		fi
 	}
 	:: (state == s_Rp) -> atomic {
 		if
-		:: nxt -> Vs = 1; Rs = 0;  nxt = 0; state = s_Vs;
+		:: nxt -> Vs = 1; Rs = 0;  nxt = 0; state = s_Vs; SPs = 0;
 		fi
 	}
 	:: (state == s_Vs) -> atomic {
@@ -51,12 +51,12 @@ active proctype fsm() {
 	}
 	:: (state == s_As) -> atomic {
 		if
-		:: nxt -> As = 0; Rs = 1; nxt = 0; state = s_Rs;
+		:: nxt -> As = 0; Rs = 1; nxt = 0; state = s_Rs; SPs = 1;
 		fi
 	}
 	:: (state == s_Rs) -> atomic {
 		if
-		:: nxt -> Vp = 1; Rp = 0; nxt = 0; state = s_Vp;
+		:: nxt -> Vp = 1; Rp = 0; nxt = 0; state = s_Vp; SPp = 0;
 		fi
 	}
 	od
