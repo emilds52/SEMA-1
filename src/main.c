@@ -1,7 +1,5 @@
-#include <bits/time.h>
 #include <stdio.h>
 #include <time.h>
-#include <unistd.h>
 #include "fsm.h"
 #include "model.h"
 
