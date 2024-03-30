@@ -1,0 +1,5 @@
+build
+pan*
+*.tmp
+*.trail
+*.nvr
