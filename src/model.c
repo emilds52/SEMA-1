@@ -1,13 +1,13 @@
-#include <bits/time.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <time.h>
 #include "fsm.h"
 
-#define NANO_SECOND 1000000000L
-const long TIMEV = 3*NANO_SECOND; 
-const long TIMEA = 1*NANO_SECOND; 
-const long TIMER = 2*NANO_SECOND; 
+const uint64_t NANO_SECOND = 1000000000;
+const uint64_t TIMEV = 3*NANO_SECOND; 
+const uint64_t TIMEA = 1*NANO_SECOND; 
+const uint64_t TIMER = 2*NANO_SECOND; 
 
 enum semaphoreFSM {
     s_Vp,
