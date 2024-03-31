@@ -4,11 +4,10 @@
 #include <time.h>
 #include "fsm.h"
 
-#define NANO_SECOND_MULTIPLIER 1000000000L
-const long TIMEV = 3*NANO_SECOND_MULTIPLIER; 
-const long TIMEA = 1*NANO_SECOND_MULTIPLIER; 
-const long TIMER = 2*NANO_SECOND_MULTIPLIER; 
-//TODO: como calculamos now? Como generamos entradas? Desde barra comandos o probamos en uc?
+#define NANO_SECOND 1000000000L
+const long TIMEV = 3*NANO_SECOND; 
+const long TIMEA = 1*NANO_SECOND; 
+const long TIMER = 2*NANO_SECOND; 
 
 enum semaphoreFSM {
     s_Vp,
@@ -21,8 +20,8 @@ enum semaphoreFSM {
 
 void add_time_ns(struct timespec* time, long addition_ns){
     time->tv_nsec += addition_ns;
-    if (time->tv_nsec > 1000000000){
-        time->tv_nsec -= 1000000000;
+    while(time->tv_nsec > NANO_SECOND){
+        time->tv_nsec -= NANO_SECOND;
         time->tv_sec++;
     }
 }
@@ -35,8 +34,8 @@ int cmpg_time(struct timespec t1, struct timespec t2){
 static int  Ap, Rp, SPp = 0;
 static int Vs, As, SPs = 0;
 static int Vp, Rs = 1;
-static int E, Bs, Bp = 0; //inputs, modelamos?
-static struct timespec next;// now?
+static int E, Bs, Bp = 0;
+static struct timespec next;
 
 // Guard functions
 static int evaluate_to_Ap (fsm_t* this){
